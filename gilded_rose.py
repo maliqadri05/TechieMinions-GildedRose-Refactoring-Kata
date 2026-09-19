@@ -17,6 +17,8 @@ class GildedRose(object):
                 self._update_aged_brie(item)
             case "Backstage passes to a TAFKAL80ETC concert":
                 self._update_backstage_pass(item)
+            # Assumption: all items whose name starts with "Conjured "
+            # follow the Conjured quality degradation rules.
             case _ if item.name.startswith("Conjured "):
                 self._update_conjured(item)
             case _:
