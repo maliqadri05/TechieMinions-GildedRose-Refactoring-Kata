@@ -235,6 +235,71 @@ class GildedRoseTest(unittest.TestCase):
         self.assertEqual(5, item.sell_in)
         self.assertEqual(0, item.quality)
 
+        
+    # Boundary Cases
+
+    def test_normal_item_quality_one_before_expiry(self):
+        item = self.item_change("Elixir of the Mongoose", 5, 1)
+
+        self.assertEqual(4, item.sell_in)
+        self.assertEqual(0, item.quality)
+
+    def test_normal_item_quality_zero_after_expiry(self):
+        item = self.item_change("Elixir of the Mongoose", -2, 0)
+
+        self.assertEqual(-3, item.sell_in)
+        self.assertEqual(0, item.quality)
+
+    def test_aged_brie_quality_zero_after_expiry(self):
+        item = self.item_change("Aged Brie", -1, 0)
+
+        self.assertEqual(-2, item.sell_in)
+        self.assertEqual(2, item.quality)
+
+    def test_aged_brie_quality_50_after_expiry(self):
+        item = self.item_change("Aged Brie", -1, 50)
+
+        self.assertEqual(-2, item.sell_in)
+        self.assertEqual(50, item.quality)
+
+    def test_backstage_pass_quality_48_at_5_days(self):
+        item = self.item_change(
+            "Backstage passes to a TAFKAL80ETC concert",
+            5,
+            48
+        )
+
+        self.assertEqual(4, item.sell_in)
+        self.assertEqual(50, item.quality)
+
+    def test_backstage_pass_quality_49_at_1_day(self):
+        item = self.item_change(
+            "Backstage passes to a TAFKAL80ETC concert",
+            1,
+            49
+        )
+
+        self.assertEqual(0, item.sell_in)
+        self.assertEqual(50, item.quality)
+
+    def test_conjured_item_quality_three_before_expiry(self):
+        item = self.item_change("Conjured Mana Cake", 5, 3)
+
+        self.assertEqual(4, item.sell_in)
+        self.assertEqual(1, item.quality)
+
+    def test_conjured_item_quality_three_after_expiry(self):
+        item = self.item_change("Conjured Mana Cake", -1, 3)
+
+        self.assertEqual(-2, item.sell_in)
+        self.assertEqual(0, item.quality)
+
+    def test_conjured_item_quality_50_before_expiry(self):
+        item = self.item_change("Conjured Mana Cake", 5, 50)
+
+        self.assertEqual(4, item.sell_in)
+        self.assertEqual(48, item.quality)
+
 
 if __name__ == '__main__':
     unittest.main()
